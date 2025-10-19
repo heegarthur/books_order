@@ -2,13 +2,11 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
-# --- 1. Parameters ---
-EMBED_SIZE = 16    # compact voor korte woorden
-HIDDEN_SIZE = 32   # voldoende voor korte sequenties
-MAX_WORDS = 10     # grootste aantal woorden in een lijst
-MAX_LEN = 3        # max letters per woord (2 letters + marge)
+EMBED_SIZE = 16    
+HIDDEN_SIZE = 32   
+MAX_WORDS = 10     
+MAX_LEN = 3       
 
-# --- 2. Hulpfuncties ---
 def word_to_ascii_vector(word):
     word = word[:MAX_LEN]
     vec = [ord(c) for c in word] + [0]*(MAX_LEN - len(word))
@@ -25,7 +23,6 @@ def decode_indices(indices, words):
             sorted_words.append(words[i])
     return sorted_words
 
-# --- 3. Trainingsdata ---
 TRAIN_DATA = [
     ["sp", "ak", "wi"],
     ["gs","sp","bi","ak","du"],
@@ -40,7 +37,6 @@ TRAIN_DATA = [
 X_train = [words_to_tensor(lst) for lst in TRAIN_DATA]
 y_train = [torch.tensor(sorted(range(len(lst)), key=lambda i: lst[i].lower()), dtype=torch.long) for lst in TRAIN_DATA]
 
-# --- 4. Pointer Network ---
 class Encoder(nn.Module):
     def __init__(self, input_size, embed_size, hidden_size):
         super().__init__()
@@ -78,7 +74,6 @@ class PointerDecoder(nn.Module):
         pointers = torch.stack(pointers, dim=1)
         return pointers
 
-# --- 5. Model setup ---
 input_size = MAX_LEN
 seq_len = MAX_WORDS
 encoder = Encoder(input_size, EMBED_SIZE, HIDDEN_SIZE)
@@ -88,8 +83,7 @@ params = list(encoder.parameters()) + list(decoder.parameters())
 optimizer = optim.Adam(params, lr=0.01)
 criterion = nn.CrossEntropyLoss()
 
-# --- 6. Training ---
-EPOCHS = 200  # korter voor Pythonista
+EPOCHS = 200  
 for epoch in range(EPOCHS):
     total_loss = 0
     for x, y in zip(X_train, y_train):
@@ -104,7 +98,6 @@ for epoch in range(EPOCHS):
     if (epoch+1) % 50 == 0:
         print(f"Epoch {epoch+1}, Loss: {total_loss:.4f}")
 
-# --- 7. Test via input() ---
 while True:
     user_input = input("\nVoer woorden in, gescheiden door spaties (of 'exit' om te stoppen): ")
     if user_input.lower() == "exit":
