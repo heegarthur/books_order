@@ -1,0 +1,108 @@
+body {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    min-height: 100vh;
+    padding: 2rem;
+    overflow-x: hidden;
+    transition: background 0.5s ease;
+}
+
+h1 {
+    font-size: 2rem;
+    color: #ff5b0e;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px #ff5b0e;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.2rem;
+    color: #ff5b0e;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
+input {
+    width: 90%;
+    max-width: 320px;
+    padding: 0.7rem 1rem;
+    font-size: 1rem;
+    margin-top: 1.2rem;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid #ff5b0e;
+    border-radius: 20px;
+    color: #e2e8f0;
+    outline: none;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+input:focus {
+    border-color: #ff2c07;
+    box-shadow: 0 0 12px #ff2c07;
+}
+
+button {
+    padding: 0.7rem 1.5rem;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    background: linear-gradient(90deg, #ff5b0e, #ff0707);
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 1.05rem;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    box-shadow: 0 0 15px #ff2c07;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 25px #ff0707;
+}
+
+.result {
+    margin-top: 2rem;
+    font-size: 1.1rem;
+    background: #ff5a0e50;
+    padding: 1.2rem;
+    border-radius: 5px;
+    box-shadow: 0 0 20px #ff2c07;
+    min-width: 260px;
+    text-align: center;
+    color: #e2e8f0;
+    border: 2px solid #ff0707;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.result:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0 30px rgba(56, 189, 248, 0.25);
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.6rem;
+    }
+
+    input, button {
+        width: 100%;
+        max-width: none;
+    }
+
+    .result {
+        font-size: 1rem;
+    }
+}
