@@ -1,6 +1,5 @@
 import math, random
 
-# --- 1. Parameters ---
 EMBED_SIZE = 16
 HIDDEN_SIZE = 32
 MAX_WORDS = 10
@@ -8,7 +7,6 @@ MAX_LEN = 3
 LR = 0.01
 EPOCHS = 200
 
-# --- 2. Helpers ---
 def word_to_ascii_vector(word):
     word = word[:MAX_LEN]
     vec = [ord(c)/255 for c in word] + [0]*(MAX_LEN - len(word))
@@ -21,7 +19,6 @@ def words_to_matrix(words):
 def sorted_indices(words):
     return sorted(range(len(words)), key=lambda i: words[i].lower())
 
-# --- 3. Data ---
 TRAIN_DATA = [
     ["sp", "ak", "wi"],
     ["gs","sp","bi","ak","du"],
@@ -36,7 +33,6 @@ TRAIN_DATA = [
 X_train = [words_to_matrix(lst) for lst in TRAIN_DATA]
 y_train = [sorted_indices(lst) for lst in TRAIN_DATA]
 
-# --- 4. Eenvoudig netwerk ---
 def rand_matrix(rows, cols):
     return [[random.uniform(-0.5, 0.5) for _ in range(cols)] for _ in range(rows)]
 
@@ -51,31 +47,26 @@ def softmax(v):
     s = sum(exps)
     return [x/s for x in exps]
 
-# --- 5. Initialisatie ---
 W1 = rand_matrix(MAX_LEN, HIDDEN_SIZE)
 W2 = rand_matrix(HIDDEN_SIZE, MAX_WORDS)
 
-# --- 6. Training ---
 for epoch in range(EPOCHS):
     total_loss = 0
     for x, y in zip(X_train, y_train):
-        # Voor elk woord
+
         preds = []
         for word_vec in x:
-            # Forward
             h = [sum(word_vec[i]*W1[i][j] for i in range(MAX_LEN)) for j in range(HIDDEN_SIZE)]
             h = [max(0, v) for v in h]
             out = [sum(h[i]*W2[i][j] for i in range(HIDDEN_SIZE)) for j in range(MAX_WORDS)]
             probs = softmax(out)
             preds.append(probs)
-        # Simple loss = afstand tot one-hot targets
         for i, target_index in enumerate(y):
             if target_index < len(preds):
                 target = [0]*MAX_WORDS
                 target[target_index] = 1
                 loss = sum((preds[i][j]-target[j])**2 for j in range(MAX_WORDS))
                 total_loss += loss
-                # Backprop (heel simpel)
                 grad_out = [(preds[i][j]-target[j])*2 for j in range(MAX_WORDS)]
                 for j in range(HIDDEN_SIZE):
                     for k in range(MAX_WORDS):
@@ -83,7 +74,6 @@ for epoch in range(EPOCHS):
     if (epoch+1) % 50 == 0:
         print(f"Epoch {epoch+1}, Loss: {total_loss:.4f}")
 
-# --- 7. Test ---
 while True:
     user_input = input("\nVoer woorden in, gescheiden door spaties (of 'exit'): ")
     if user_input.lower() == "exit":
@@ -97,7 +87,6 @@ while True:
         out = [sum(h[i]*W2[i][j] for i in range(HIDDEN_SIZE)) for j in range(MAX_WORDS)]
         scores.append(sum(out))
     
-    # sorteer enkel binnen het bereik van de echte woorden
     sorted_indices_pred = sorted(range(len(words)), key=lambda i: scores[i])
     
     print("Input:", words)
